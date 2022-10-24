@@ -26,13 +26,15 @@ const firstStep = () => {
   document.querySelector(".btn-submit").addEventListener("click", () => {
     totalRespuestas = getAnswers();
     secondStep();
+    // fourthStep();
   });
-  // document.querySelector(".btn-submit").addEventListener("keydown", (e) => {
-  //   if (e.key == "Enter") {
-  //     totalRespuestas = getAnswers();
-  //     secondStep();
-  //   }
-  // });
+  document.addEventListener("keydown", (e) => {
+    if (e.key == "Enter") {
+      totalRespuestas = getAnswers();
+      secondStep();
+      // fourthStep();
+    }
+  });
 }
 
 const secondStep = () => {
@@ -113,6 +115,200 @@ const thirdStep = (porcG, porcD, porcDd, porcS) => {
     mainComponent.innerHTML += `<div class="d-flex"><b class="me-1">S:</b> ${porcS}% (Aumentado)</div>`;
   }
   mainComponent.innerHTML += '</div>'
+  mainComponent.innerHTML += `
+  <div class="d-flex justify-content-end mt-3">
+    <button class="btn btn-back">Volver</button>
+    <button class="btn btn-submit ms-3">Siguiente</button>
+  </div>`
+  document.querySelector(".btn-submit").addEventListener("click", () => {
+    totalRespuestas = getAnswers();
+    fourthStep();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key == "Enter") {
+      totalRespuestas = getAnswers();
+      fourthStep();
+    }
+  });
+}
+
+let fPorciento, fPorcientoExt = 0;
+const fourthStep = () => {
+  mainComponent.innerHTML = "";
+  mainComponent.innerHTML =
+    `
+  <p class="title-label">Determinantes: <span></span></p>
+  <label class="large-label" for="cant-resp">
+    Forma (F pura):
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="F" name="">
+      </div>
+    </div>
+  </label>
+  <label class="large-label" for="cant-resp">
+    Movimiento:
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="M" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="FM" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="Fm" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="Mf" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="m" name="">
+      </div>
+    </div>
+  </label>
+  <label class="large-label" for="cant-resp">
+    Color:
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="FC" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="CF" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="C" name="">
+      </div>
+    </div>
+  </label>
+  <label class="large-label" for="cant-resp">
+    Color acromatico:
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="FC'" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="C'F" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="C'" name="">
+      </div>
+    </div>
+  </label>
+  <label class="large-label" for="cant-resp">
+    Claroscuro:
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="c" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="K" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="k" name="">
+      </div>
+    </div>
+  </label>
+  <label class="large-label" for="cant-resp">
+    Claroscuro de superficie o textura:
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="Fc" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="cF" name="">
+      </div>
+    </div>
+  </label>
+  <label class="large-label" for="cant-resp">
+    Claroscuro de tridimensionalidad o profundidad:
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="FK" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="KF" name="">
+      </div>
+    </div>
+  </label>
+  <label class="large-label" for="cant-resp">
+    Claroscuro de tridimensionalidad proyectada en un plano bidimensional:
+    <div class="row">
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="Fk" name="">
+      </div>
+      <div class="col-3">
+        <input class="input-normal" type="number" placeholder="kF" name="">
+      </div>
+    </div>
+  </label>
+  <div class="d-flex justify-content-end mt-3">
+    <button class="btn btn-back">Volver</button>
+    <button class="btn btn-submit ms-3">Siguiente</button>
+  </div>
+  `
+  let getTitle = document.querySelector(".title-label span");
+
+  let auxArray = [];
+
+  const SumaDeterminantes = () => {
+    let totalSum = 0;
+    let saveArray = getAnswers();
+    let modifiedArr = saveArray.map(function (el) {
+      return Number(el);
+    });
+    auxArray = modifiedArr;
+    modifiedArr = modifiedArr.filter(function (val) {
+      return val !== 0;
+    });
+    modifiedArr.forEach(element => {
+      totalSum = (totalSum + element);
+    });
+    getTitle.innerHTML = totalSum;
+    setTimeout(function(){
+      if (confirm('Estas seguro que deseas continuar con estos valores?')) {
+        // Save it!
+        console.log(auxArray);
+        fPorciento = ((auxArray[0]/totalSum)*100).toFixed(1);
+        fPorcientoExt = (((auxArray[0])+(auxArray[2]+auxArray[3]+auxArray[6]+auxArray[9]+auxArray[15]+auxArray[17]+auxArray[19]))/totalSum*100).toFixed(1);
+        fifthStep();
+      } else {
+        // Do nothing!
+      }
+    }, 2000);
+  }
+
+  document.querySelector(".btn-submit").addEventListener("click", () => {
+    SumaDeterminantes();
+  });
+  // document.addEventListener("keydown", (e) => {
+  //   if (e.key == "Enter") {
+
+  //   }
+  // });
+}
+
+const fifthStep = () => {
+  mainComponent.innerHTML = "";
+  mainComponent.innerHTML = '<p>Resultados: </p>';
+  mainComponent.innerHTML += '<div class="d-flex flex-column">';
+  if (fPorciento >= 35 && fPorciento <= 50) {
+    mainComponent.innerHTML += `<div class="d-flex"><b class="me-1">F%:</b> ${fPorciento}% (Esperado)</div>`;
+  } else {
+    if (fPorciento < 35) {
+      mainComponent.innerHTML += `<div class="d-flex"><b class="me-1">F%:</b> ${fPorciento}% (Impulsividad)</div>`;
+    } else if (fPorciento > 50) {
+      mainComponent.innerHTML += `<div class="d-flex"><b class="me-1">F%:</b> ${fPorciento}% (Inhibicion y Rigidez)</div>`;
+    }
+  }
+  if (fPorcientoExt >= 80 && fPorcientoExt <= 95) {
+    mainComponent.innerHTML += `<div class="d-flex"><b class="me-1">Fext%:</b> ${fPorcientoExt}% (Esperado)</div>`;
+  } else {
+    if (fPorcientoExt < 80) {
+      mainComponent.innerHTML += `<div class="d-flex"><b class="me-1">Fext%:</b> ${fPorcientoExt}% (Control de los impulsos menor de lo esperado)</div>`;
+    } else if (fPorcientoExt > 95) {
+      mainComponent.innerHTML += `<div class="d-flex"><b class="me-1">Fext%:</b> ${fPorcientoExt}% (Control de los impulsos superior a lo esperado)</div>`;
+    }
+  }
 }
 
 
